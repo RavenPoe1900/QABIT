@@ -1,4 +1,3 @@
-// Fase 1: sin modelos todavía. El modelo Task y la migración inicial llegan en la fase 3.
 generator client {
   provider     = "prisma-client"
   output       = "../src/generated/prisma"
@@ -7,4 +6,18 @@ generator client {
 
 datasource db {
   provider = "sqlite"
+}
+
+// Las restricciones CHECK (estado válido y longitudes) no las expresa Prisma: se añaden a mano
+// en prisma/migrations/*_init/migration.sql. Los límites coinciden con packages/shared.
+model Task {
+  id        Int      @id @default(autoincrement())
+  title     String
+  assignee  String
+  status    String   @default("pending")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @map("updated_at")
+
+  @@index([status], map: "idx_tasks_status")
+  @@map("tasks")
 }
