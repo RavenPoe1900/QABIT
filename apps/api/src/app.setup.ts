@@ -3,7 +3,8 @@ import type { Request, Response } from 'express';
 import { ApiExceptionFilter } from './infrastructure/http/api-exception.filter';
 import { errorBody } from './infrastructure/http/error-response';
 import { jsonBodyErrorHandler, jsonBodyParser } from './infrastructure/http/json-body';
-import { setupSwagger } from './infrastructure/http/openapi/swagger';
+import { DOCS_PATH, setupSwagger } from './infrastructure/http/openapi/swagger';
+import { securityHeaders } from './infrastructure/http/security-headers';
 
 /**
  * La aplicación se crea SIN el parser de cuerpo de Nest: lo registramos nosotros en
@@ -14,13 +15,17 @@ export const APP_OPTIONS = { bodyParser: false } as const;
 
 /** Configuración previa a `app.init()`. Usa `initApp`, que además registra el 404 final. */
 export function configureApp(app: NestExpressApplication): void {
+  // Swagger se publica en /api/docs y /api/docs-json, salvo en producción.
+  const withDocs = process.env.NODE_ENV !== 'production';
+
   app.disable('x-powered-by');
+  // Primero las cabeceras: así las llevan TODAS las respuestas, también los 400/413/415 del parser y los 404.
+  app.use(securityHeaders({ docsPrefix: withDocs ? `/${DOCS_PATH}` : undefined }));
   app.use(jsonBodyParser(), jsonBodyErrorHandler);
   app.setGlobalPrefix('api');
   app.useGlobalFilters(new ApiExceptionFilter());
 
-  // Swagger se publica en /api/docs y /api/docs-json, salvo en producción.
-  if (process.env.NODE_ENV !== 'production') {
+  if (withDocs) {
     setupSwagger(app);
   }
 }
