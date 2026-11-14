@@ -26,6 +26,9 @@ const SAMPLE = [
 
 async function main(): Promise<void> {
   loadApiEnv();
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('db:seed borra todas las tareas y no se ejecuta con NODE_ENV=production.');
+  }
   const dbPath = resolveDbPath();
   ensureDbDir(dbPath);
 
