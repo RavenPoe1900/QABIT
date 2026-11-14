@@ -1,17 +1,17 @@
 import { Catch, HttpException, Logger, type ArgumentsHost, type ExceptionFilter } from '@nestjs/common';
-import type { ApiErrorBody } from '@task-manager/shared';
+import { ERROR_MESSAGES, type ApiErrorBody, type ErrorCode } from '@task-manager/shared';
 import { errorBody, type JsonResponse } from './error-response';
 import { RequestValidationError } from './zod-validation.pipe';
 
 /** Códigos y mensajes genéricos para HttpException 4xx que no son ninguno de los anteriores. */
-export const HTTP_ERRORS: Record<number, { code: string; message: string }> = {
+export const HTTP_ERRORS: Record<number, { code: ErrorCode; message: string }> = {
   400: { code: 'BAD_REQUEST', message: 'La petición no es válida' },
   405: { code: 'METHOD_NOT_ALLOWED', message: 'Método no permitido' },
   413: { code: 'PAYLOAD_TOO_LARGE', message: 'La petición es demasiado grande' },
   415: { code: 'UNSUPPORTED_MEDIA_TYPE', message: 'Tipo de contenido no admitido' },
 };
 
-export const GENERIC_HTTP_ERROR = { code: 'HTTP_ERROR', message: 'La petición no se pudo procesar' };
+export const GENERIC_HTTP_ERROR: { code: ErrorCode; message: string } = { code: 'HTTP_ERROR', message: 'La petición no se pudo procesar' };
 
 /**
  * Filtro GLOBAL de errores de transporte: validación de la petición, rutas inexistentes y
@@ -42,7 +42,7 @@ export class ApiExceptionFilter implements ExceptionFilter {
       const status = exception.getStatus();
       if (status === 404) {
         // Nest lanza NotFoundException cuando ninguna ruta coincide.
-        return { status, body: errorBody('ROUTE_NOT_FOUND', 'Ruta no encontrada') };
+        return { status, body: errorBody('ROUTE_NOT_FOUND', ERROR_MESSAGES.routeNotFound) };
       }
       if (status >= 400 && status < 500) {
         const known = HTTP_ERRORS[status] ?? GENERIC_HTTP_ERROR;

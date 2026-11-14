@@ -1,5 +1,5 @@
 import { Catch, type ArgumentsHost, type ExceptionFilter } from '@nestjs/common';
-import type { ApiErrorBody } from '@task-manager/shared';
+import { ERROR_MESSAGES, type ApiErrorBody } from '@task-manager/shared';
 import { errorBody, type JsonResponse } from '../../../../infrastructure/http/error-response';
 import {
   ConcurrentTaskUpdateError,
@@ -22,17 +22,14 @@ export function taskErrorToHttp(error: TaskDomainError): { status: number; body:
       status: 400,
       body: errorBody(
         'VALIDATION_ERROR',
-        'Datos inválidos',
+        ERROR_MESSAGES.validation,
         error.problems.map((problem) => ({ path: problem.field, message: problem.message })),
       ),
     };
   }
   return {
     status: 409,
-    body: errorBody(
-      'CONCURRENT_UPDATE',
-      'La tarea cambió mientras se actualizaba. Vuelve a cargarla e inténtalo de nuevo.',
-    ),
+    body: errorBody('CONCURRENT_UPDATE', ERROR_MESSAGES.concurrentUpdate),
   };
 }
 
