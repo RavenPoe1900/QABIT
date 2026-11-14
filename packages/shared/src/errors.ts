@@ -19,6 +19,13 @@ export const ERROR_CODES = [
   'INTERNAL_ERROR',
 ] as const;
 
+/** Mensajes que la API repite en varios sitios (respuestas reales y documentación OpenAPI). */
+export const ERROR_MESSAGES = {
+  validation: 'Datos inválidos',
+  routeNotFound: 'Ruta no encontrada',
+  concurrentUpdate: 'La tarea cambió mientras se actualizaba. Vuelve a cargarla e inténtalo de nuevo.',
+} as const;
+
 export type ErrorCode = (typeof ERROR_CODES)[number];
 
 export const errorDetailSchema = z.object({

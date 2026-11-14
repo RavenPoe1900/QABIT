@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
-import { ID_MAX, TASK_STATUSES } from '@task-manager/shared';
+import { ERROR_MESSAGES, ID_MAX, TASK_STATUSES } from '@task-manager/shared';
 import { JSON_BODY_LIMIT } from '../../../../infrastructure/http/json-body';
 import { errorExample, schemaRef } from '../../../../infrastructure/http/openapi/schemas';
 
@@ -16,7 +16,7 @@ function errorResponse(
 const validationError = (summary: string, path: string, message: string) =>
   errorExample(summary, {
     code: 'VALIDATION_ERROR',
-    message: 'Datos inválidos',
+    message: ERROR_MESSAGES.validation,
     details: [{ path, message }],
   });
 
@@ -129,7 +129,7 @@ export const ApiChangeTaskStatus = () =>
     errorResponse(409, 'La tarea siguió cambiando por otras peticiones y se agotaron los reintentos. No se aplicó el cambio.', {
       concurrent: errorExample('Cambio concurrente', {
         code: 'CONCURRENT_UPDATE',
-        message: 'La tarea cambió mientras se actualizaba. Vuelve a cargarla e inténtalo de nuevo.',
+        message: ERROR_MESSAGES.concurrentUpdate,
       }),
     }),
     payloadTooLarge,

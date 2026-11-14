@@ -1,8 +1,8 @@
-import type { ApiErrorBody, ApiErrorDetail } from '@task-manager/shared';
+import type { ApiErrorBody, ApiErrorDetail, ErrorCode } from '@task-manager/shared';
 
 /** Construye el cuerpo de error acordado: `{ error: { code, message, details? } }`. */
 export function errorBody(
-  code: string,
+  code: ErrorCode,
   message: string,
   details?: ApiErrorDetail[],
 ): ApiErrorBody {
