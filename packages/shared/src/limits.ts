@@ -9,5 +9,8 @@
 export const TITLE_MAX = 120;
 export const ASSIGNEE_MAX = 60;
 
+/** Longitud de un texto tal como la cuenta el contrato: sin espacios de los extremos y en puntos de código. */
+export const textLength = (value: string): number => Array.from(value.trim()).length;
+
 /** Mayor identificador admitido: el tipo Int de Prisma/SQLite en este proyecto es de 32 bits. */
 export const ID_MAX = 2_147_483_647;
