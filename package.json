@@ -1,0 +1,28 @@
+{
+  "name": "qabit-task-manager",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Gestor de tareas: API NestJS (hexagonal) + web Next.js + contrato compartido con Zod",
+  "engines": {
+    "node": ">=24.21.0 <25"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build:shared": "npm run build -w @task-manager/shared",
+    "dev": "npm run build:shared && npm run db:migrate -w @task-manager/api && concurrently -k -n shared,api,web -c blue,green,magenta \"npm run dev -w @task-manager/shared\" \"npm run dev -w @task-manager/api\" \"npm run dev -w @task-manager/web\"",
+    "build": "npm run build:shared && npm run build -w @task-manager/api && npm run build -w @task-manager/web",
+    "start": "concurrently -k -n api,web -c green,magenta \"npm run start -w @task-manager/api\" \"npm run start -w @task-manager/web\"",
+    "typecheck": "npm run build:shared && npm run typecheck --workspaces --if-present",
+    "test": "npm run build:shared && npm run test --workspaces --if-present"
+  },
+  "dependencies": {
+    "concurrently": "10.0.7"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "typescript": "6.0.3"
+  }
+}

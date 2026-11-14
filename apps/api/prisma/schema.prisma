@@ -1,0 +1,10 @@
+// Fase 1: sin modelos todavía. El modelo Task y la migración inicial llegan en la fase 3.
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "sqlite"
+}
