@@ -41,6 +41,13 @@ export function resolveDbPath(env: NodeJS.ProcessEnv = process.env): string {
   return isAbsolute(raw) ? raw : resolve(findApiRoot(), raw);
 }
 
+export const DEFAULT_HOST = '127.0.0.1';
+
+/** Dirección en la que escucha la API. Sin `HOST` (o vacío) solo acepta conexiones locales. */
+export function resolveHost(env: NodeJS.ProcessEnv = process.env): string {
+  return env.HOST?.trim() || DEFAULT_HOST;
+}
+
 export const DEFAULT_PORT = 3001;
 
 /**

@@ -4,7 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import { APP_OPTIONS, initApp } from './app.setup';
-import { loadApiEnv, resolveDbPath, resolvePort } from './config/env';
+import { loadApiEnv, resolveDbPath, resolveHost, resolvePort } from './config/env';
 
 async function bootstrap(): Promise<void> {
   loadApiEnv();
@@ -14,7 +14,7 @@ async function bootstrap(): Promise<void> {
   app.enableShutdownHooks();
 
   const port = resolvePort();
-  const host = process.env.HOST?.trim() || '127.0.0.1';
+  const host = resolveHost();
   await app.listen(port, host);
 
   const logger = new Logger('Bootstrap');
