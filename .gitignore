@@ -1,0 +1,34 @@
+# Dependencias
+node_modules/
+
+# Builds y artefactos generados
+dist/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+coverage/
+
+# Prisma: cliente generado (se regenera con prisma generate)
+apps/api/src/generated/
+
+# SQLite local
+apps/api/data/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Entorno y credenciales (los .env.example sí se versionan)
+.env
+.env.*
+!.env.example
+
+# Logs y sistema
+*.log
+npm-debug.log*
+.DS_Store
+
+# Editores
+.vscode/
+.idea/
