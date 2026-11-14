@@ -1,5 +1,6 @@
 'use client';
 
+import { textLength } from '@task-manager/shared';
 import { useId, type Ref } from 'react';
 
 interface Props {
@@ -40,7 +41,7 @@ export function TextField({ label, value, onChange, error, max, required = false
       {(required || max !== undefined) && (
         <div className="field-meta">
           {required ? <p className="hint">Obligatorio.</p> : <span />}
-          {max !== undefined && <Counter length={value.length} max={max} />}
+          {max !== undefined && <Counter length={textLength(value)} max={max} />}
         </div>
       )}
     </div>
