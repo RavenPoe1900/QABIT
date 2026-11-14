@@ -3,14 +3,14 @@ import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
-import { configureApp } from './app.setup';
+import { APP_OPTIONS, initApp } from './app.setup';
 import { loadApiEnv, resolveDbPath, resolvePort } from './config/env';
 
 async function bootstrap(): Promise<void> {
   loadApiEnv();
 
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  configureApp(app);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, APP_OPTIONS);
+  await initApp(app);
   app.enableShutdownHooks();
 
   const port = resolvePort();
