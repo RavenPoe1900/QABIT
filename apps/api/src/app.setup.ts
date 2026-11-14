@@ -3,6 +3,7 @@ import type { Request, Response } from 'express';
 import { ApiExceptionFilter } from './infrastructure/http/api-exception.filter';
 import { errorBody } from './infrastructure/http/error-response';
 import { jsonBodyErrorHandler, jsonBodyParser } from './infrastructure/http/json-body';
+import { setupSwagger } from './infrastructure/http/openapi/swagger';
 
 /**
  * La aplicación se crea SIN el parser de cuerpo de Nest: lo registramos nosotros en
@@ -17,6 +18,11 @@ export function configureApp(app: NestExpressApplication): void {
   app.use(jsonBodyParser(), jsonBodyErrorHandler);
   app.setGlobalPrefix('api');
   app.useGlobalFilters(new ApiExceptionFilter());
+
+  // Swagger se publica en /api/docs y /api/docs-json, salvo en producción.
+  if (process.env.NODE_ENV !== 'production') {
+    setupSwagger(app);
+  }
 }
 
 /**

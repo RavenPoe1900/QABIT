@@ -1,4 +1,5 @@
 import { Body, Controller, Get, HttpCode, Inject, Param, Patch, Post, Query, UseFilters } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import {
   createTaskSchema,
   listTasksQuerySchema,
@@ -14,6 +15,7 @@ import { ChangeTaskStatusUseCase } from '../../application/change-task-status.us
 import { CreateTaskUseCase } from '../../application/create-task.use-case';
 import { ListTasksUseCase } from '../../application/list-tasks.use-case';
 import { TaskErrorsFilter } from './task-errors.filter';
+import { ApiChangeTaskStatus, ApiCreateTask, ApiListTasks } from './tasks.api-docs';
 import { presentTask } from './task.presenter';
 
 /**
@@ -22,6 +24,7 @@ import { presentTask } from './task.presenter';
  * negocio. Los tipos del contrato (`@task-manager/shared`) solo existen en esta capa; el
  * dominio tiene los suyos y TypeScript comprueba aquí que son compatibles.
  */
+@ApiTags('tasks')
 @UseFilters(TaskErrorsFilter)
 @Controller('tasks')
 export class TasksController {
@@ -32,6 +35,7 @@ export class TasksController {
   ) {}
 
   @Get()
+  @ApiListTasks()
   async list(
     @Query(new ZodValidationPipe(listTasksQuerySchema, '(query)')) query: ListTasksQuery,
   ): Promise<TaskDto[]> {
@@ -41,6 +45,7 @@ export class TasksController {
 
   @Post()
   @HttpCode(201)
+  @ApiCreateTask()
   async create(
     @Body(new ZodValidationPipe(createTaskSchema)) body: CreateTaskInput,
   ): Promise<TaskDto> {
@@ -49,6 +54,7 @@ export class TasksController {
   }
 
   @Patch(':id/status')
+  @ApiChangeTaskStatus()
   async changeStatus(
     @Param('id', new ZodValidationPipe(taskIdParamSchema, 'id')) id: number,
     @Body(new ZodValidationPipe(updateTaskStatusSchema)) body: UpdateTaskStatusRequest,
