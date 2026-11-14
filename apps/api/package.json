@@ -1,0 +1,36 @@
+{
+  "name": "@task-manager/api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "API REST de tareas con NestJS, Prisma y SQLite",
+  "scripts": {
+    "dev": "prisma generate && nest start --watch",
+    "build": "prisma generate && nest build",
+    "start": "prisma migrate deploy && node dist/main.js",
+    "db:migrate": "prisma migrate deploy",
+    "typecheck": "prisma generate && tsc -p tsconfig.json --noEmit",
+    "test": "prisma generate && vitest run"
+  },
+  "dependencies": {
+    "@nestjs/common": "12.5.0",
+    "@nestjs/core": "12.5.0",
+    "@nestjs/platform-express": "12.5.0",
+    "@prisma/adapter-better-sqlite3": "7.10.1",
+    "@prisma/client": "7.10.1",
+    "@task-manager/shared": "0.1.0",
+    "better-sqlite3": "12.11.1",
+    "express": "5.3.0",
+    "prisma": "7.10.1",
+    "reflect-metadata": "0.2.2",
+    "rxjs": "7.8.2"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "12.0.13",
+    "@nestjs/testing": "12.5.0",
+    "@types/better-sqlite3": "9.6.0",
+    "@types/express": "5.0.6",
+    "@types/supertest": "7.2.1",
+    "supertest": "7.3.2",
+    "vitest": "5.1.0"
+  }
+}
