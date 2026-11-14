@@ -2,7 +2,7 @@ import { existsSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, isAbsolute, join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_PORT, ensureDbDir, findApiRoot, resolveDbPath, resolvePort } from '../src/config/env';
+import { DEFAULT_HOST, DEFAULT_PORT, ensureDbDir, findApiRoot, resolveDbPath, resolveHost, resolvePort } from '../src/config/env';
 
 const apiRoot = resolve(__dirname, '..');
 
@@ -65,4 +65,15 @@ describe('puerto de la API (PORT)', () => {
       expect(() => resolvePort({ PORT: raw })).toThrow(/PORT no válido/);
     },
   );
+});
+
+describe('configuración de HOST', () => {
+  it('sin HOST (o vacío) solo escucha en local', () => {
+    expect(resolveHost({})).toBe(DEFAULT_HOST);
+    expect(resolveHost({ HOST: '  ' })).toBe(DEFAULT_HOST);
+  });
+
+  it('usa HOST recortado si se indica', () => {
+    expect(resolveHost({ HOST: ' 0.0.0.0 ' })).toBe('0.0.0.0');
+  });
 });
